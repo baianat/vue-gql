@@ -5,6 +5,7 @@
   "module": "dist/vql.esm.js",
   "unpkg": "dist/vql.js",
   "main": "dist/vql.js",
+  "types": "dist/types/src",
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
@@ -12,7 +13,7 @@
     "test": "jest",
     "test:cover": "jest --coverage",
     "lint": "eslint . '**/*.{js,jsx,ts,tsx}' --fix",
-    "build": "node scripts/build.js",
+    "build": "node scripts/build.js && npm run ts:defs",
     "ts:defs": "tsc --emitDeclarationOnly"
   },
   "author": "Abdelrahman Awad <logaretm1@gmail.com>",
