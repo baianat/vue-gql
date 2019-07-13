@@ -1,4 +1,4 @@
 export { createClient } from './client';
-export { Provider, withProvider } from './provider';
-export { Query } from './query';
-export { Mutation } from './mutation';
+export { Provider, withProvider } from './Provider';
+export { Query } from './Query';
+export { Mutation } from './Mutation';
