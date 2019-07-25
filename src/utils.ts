@@ -1,7 +1,7 @@
 import { DocumentNode, print } from 'graphql';
 import stringify from 'fast-json-stable-stringify';
 import Vue from 'vue';
-import { Operation } from './types';
+import { Operation, Fetcher, FetchOptions } from './types';
 
 /**
  * Normalizes a list of variable objects.
@@ -57,4 +57,39 @@ export function normalizeChildren(context: Vue, slotProps: any) {
   }
 
   return context.$slots.default || [];
+}
+
+export function resolveGlobalFetch(): Fetcher | undefined {
+  if (typeof window !== 'undefined' && 'fetch' in window) {
+    return window.fetch.bind(window);
+  }
+
+  if (typeof global !== 'undefined' && 'fetch' in global) {
+    return (global as any).fetch;
+  }
+
+  return undefined;
+}
+
+export const DEFAULT_FETCH_OPTIONS = {
+  method: 'POST',
+  headers: {
+    'content-type': 'application/json'
+  }
+};
+
+export function makeFetchOptions({ query, variables }: Operation, opts: FetchOptions) {
+  const normalizedQuery = normalizeQuery(query);
+  if (!normalizedQuery) {
+    throw new Error('A query must be provided.');
+  }
+
+  return {
+    method: DEFAULT_FETCH_OPTIONS.method,
+    headers: {
+      ...DEFAULT_FETCH_OPTIONS.headers
+    },
+    ...opts,
+    body: JSON.stringify({ query: normalizedQuery, variables })
+  };
 }

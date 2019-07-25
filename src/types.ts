@@ -5,6 +5,10 @@ export interface OperationResult {
   errors: any;
 }
 
+export type Fetcher = typeof fetch;
+
+export type FetchOptions = Omit<RequestInit, 'body'>;
+
 export type CachePolicy = 'cache-and-network' | 'network-only' | 'cache-first';
 
 export interface Operation {

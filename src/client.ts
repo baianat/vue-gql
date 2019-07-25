@@ -1,10 +1,6 @@
 import { makeCache } from './cache';
-import { OperationResult, CachePolicy, Operation, ObservableLike } from './types';
-import { normalizeQuery } from './utils';
-
-type Fetcher = typeof fetch;
-
-type FetchOptions = Omit<RequestInit, 'body'>;
+import { OperationResult, CachePolicy, Operation, ObservableLike, Fetcher, FetchOptions } from './types';
+import { resolveGlobalFetch, makeFetchOptions } from './utils';
 
 interface CachedOperation extends Operation {
   cachePolicy?: CachePolicy;
@@ -24,35 +20,6 @@ interface VqlClientOptions {
   context?: ContextFactory;
   cachePolicy?: CachePolicy;
   subscriptionForwarder?: SubscriptionForwarder;
-}
-
-function resolveGlobalFetch(): Fetcher | undefined {
-  if (typeof window !== 'undefined' && 'fetch' in window) {
-    return window.fetch.bind(window);
-  }
-
-  if (typeof global !== 'undefined' && 'fetch' in global) {
-    return (global as any).fetch;
-  }
-
-  return undefined;
-}
-
-function makeFetchOptions({ query, variables }: Operation, opts: FetchOptions) {
-  const normalizedQuery = normalizeQuery(query);
-  if (!normalizedQuery) {
-    throw new Error('A query must be provided.');
-  }
-
-  return {
-    method: 'POST',
-    body: JSON.stringify({ query: normalizedQuery, variables }),
-    ...opts,
-    headers: {
-      'content-type': 'application/json',
-      ...opts.headers
-    }
-  };
 }
 
 interface VqlClientOptionsWithFetcher extends VqlClientOptions {
