@@ -51,7 +51,7 @@
     "jest": "^24.8.0",
     "lint-staged": "^9.2.0",
     "mkdirp": "^0.5.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "prettier": "^1.18.2",
     "rollup": "^1.16.7",
     "rollup-plugin-commonjs": "^10.0.1",
